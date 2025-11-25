@@ -1,0 +1,279 @@
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+    static void main() {
+;
+    }
+
+    public static class Factorial {
+
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+
+            int num = -1;
+
+            // Input validation loop
+            while (num < 0) {
+                try {
+                    System.out.print("Enter a non-negative number: ");
+                    num = scanner.nextInt();
+
+                    if (num < 0) {
+                        System.out.println("Value must be greater than or equal to zero.");
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a valid integer.");
+                    scanner.nextLine(); // clear invalid input
+                }
+            }
+
+            scanner.nextLine(); // Clear buffer
+
+            System.out.println("\nChoose a method:");
+            System.out.println("1 → Iterative Factorial");
+            System.out.println("2 → Recursive Factorial");
+            System.out.print("Enter choice: ");
+
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> System.out.println("Factorial = " + calculateFactorial(num));
+                case "2" -> System.out.println("Factorial = " + factorial(num));
+                default -> System.out.println("Invalid Response");
+            }
+
+            scanner.close();
+        }
+
+        static long calculateFactorial(int num) {
+            long result = 1;
+            for (int i = 2; i <= num; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        static long factorial(int n) {
+            // Base case
+            if (n == 0 || n == 1) {
+                return 1;
+            }
+            // Recursive call
+            return n * factorial(n - 1);
+        }
+
+        public static class TextAnalyzerPro {
+
+            public static void main(String[] args) {
+                SwingUtilities.invokeLater(TextAnalyzerPro::createGUI);
+            }
+
+            private static void createGUI() {
+                JFrame frame = new JFrame("Text Analyzer - Professional GUI");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(800, 600);
+                frame.setLayout(new BorderLayout(10, 10));
+
+                // Colors
+                Color bgColor = new Color(30, 30, 30);
+                Color fgColor = new Color(230, 230, 230);
+                Color btnColor = new Color(70, 130, 180);
+                Color btnTextColor = Color.WHITE;
+
+                frame.getContentPane().setBackground(bgColor);
+
+                // Text area for input
+                JTextArea textArea = new JTextArea();
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                textArea.setFont(new Font("Consolas", Font.PLAIN, 16));
+                textArea.setBackground(new Color(50, 50, 50));
+                textArea.setForeground(fgColor);
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(fgColor),
+                        "Enter Your Text"));
+                frame.add(scrollPane, BorderLayout.CENTER);
+
+                // Results panel
+                JPanel resultPanel = new JPanel();
+                resultPanel.setLayout(new GridLayout(6, 1, 5, 5));
+                resultPanel.setBackground(bgColor);
+
+                JLabel vowelsLabel = new JLabel("Vowels: 0");
+                JLabel consonantLabel = new JLabel("Consonants: 0");
+                JLabel punctuationLabel = new JLabel("Punctuation: 0");
+                JLabel spaceLabel = new JLabel("Spaces: 0");
+                JLabel totalLabel = new JLabel("Total Characters: 0");
+                JLabel percentLabel = new JLabel("Percentages: 0% vowels, 0% consonants, 0% punctuation, 0% spaces");
+
+                JLabel[] labels = {vowelsLabel, consonantLabel, punctuationLabel, spaceLabel, totalLabel, percentLabel};
+                for (JLabel lbl : labels) {
+                    lbl.setForeground(fgColor);
+                    lbl.setFont(new Font("Arial", Font.PLAIN, 14));
+                    resultPanel.add(lbl);
+                }
+
+                frame.add(resultPanel, BorderLayout.NORTH);
+
+                // Button to analyze
+                JButton analyzeBtn = new JButton("Analyze Text");
+                analyzeBtn.setBackground(btnColor);
+                analyzeBtn.setForeground(btnTextColor);
+                analyzeBtn.setFont(new Font("Arial", Font.BOLD, 16));
+                frame.add(analyzeBtn, BorderLayout.SOUTH);
+
+                // Pie chart panel
+                JPanel chartPanel = new JPanel() {
+                    Map<String, Integer> data = new HashMap<>();
+
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        super.paintComponent(g);
+                        if (data.isEmpty()) return;
+
+                        int total = data.values().stream().mapToInt(Integer::intValue).sum();
+                        int startAngle = 0;
+                        int i = 0;
+                        Color[] colors = {new Color(70, 130, 180), new Color(144, 238, 144), new Color(255, 99, 71), new Color(238, 238, 0)};
+
+                        for (Map.Entry<String, Integer> entry : data.entrySet()) {
+                            int arc = (int) Math.round(entry.getValue() * 360.0 / total);
+                            g.setColor(colors[i % colors.length]);
+                            g.fillArc(10, 10, getWidth() - 20, getHeight() - 20, startAngle, arc);
+                            startAngle += arc;
+                            i++;
+                        }
+
+                        // Legend
+                        g.setFont(new Font("Arial", Font.BOLD, 12));
+                        int y = getHeight() - 60;
+                        i = 0;
+                        for (Map.Entry<String, Integer> entry : data.entrySet()) {
+                            g.setColor(colors[i % colors.length]);
+                            g.fillRect(10, y, 20, 20);
+                            g.setColor(fgColor);
+                            g.drawString(entry.getKey() + " (" + entry.getValue() + ")", 35, y + 15);
+                            y += 25;
+                            i++;
+                        }
+                    }
+
+                    public void updateData(Map<String, Integer> newData) {
+                        data = newData;
+                        repaint();
+                    }
+                };
+                chartPanel.setPreferredSize(new Dimension(300, 300));
+                chartPanel.setBackground(bgColor);
+                frame.add(chartPanel, BorderLayout.EAST);
+
+                // Button action
+                analyzeBtn.addActionListener(e -> {
+                    String text = textArea.getText().toLowerCase();
+
+                    int vowels = 0, consonants = 0, punctuation = 0, spaces = 0;
+                    char[] vowelList = {'a', 'e', 'i', 'o', 'u'};
+
+                    for (char c : text.toCharArray()) {
+                        boolean isVowel = false;
+                        for (char v : vowelList) {
+                            if (c == v) {
+                                vowels++;
+                                isVowel = true;
+                                break;
+                            }
+                        }
+                        if (Character.isLetter(c) && !isVowel) consonants++;
+                        else if (c == ' ') spaces++;
+                        else if (isPunctuation(c)) punctuation++;
+                    }
+
+                    int total = text.length();
+                    vowelsLabel.setText("Vowels: " + vowels);
+                    consonantLabel.setText("Consonants: " + consonants);
+                    punctuationLabel.setText("Punctuation: " + punctuation);
+                    spaceLabel.setText("Spaces: " + spaces);
+                    totalLabel.setText("Total Characters: " + total);
+
+                    percentLabel.setText(String.format(
+                            "Percentages: %.1f%% vowels, %.1f%% consonants, %.1f%% punctuation, %.1f%% spaces",
+                            vowels * 100.0 / Math.max(1, total),
+                            consonants * 100.0 / Math.max(1, total),
+                            punctuation * 100.0 / Math.max(1, total),
+                            spaces * 100.0 / Math.max(1, total)
+                    ));
+
+                    Map<String, Integer> chartData = new HashMap<>();
+                    chartData.put("Vowels", vowels);
+                    chartData.put("Consonants", consonants);
+                    chartData.put("Punctuation", punctuation);
+                    chartData.put("Spaces", spaces);
+                    ((PieChartPanel) chartPanel).updateData(chartData);
+                });
+
+                frame.setVisible(true);
+            }
+
+            private static boolean isPunctuation(char c) {
+                switch (Character.getType(c)) {
+                    case Character.DASH_PUNCTUATION:
+                    case Character.START_PUNCTUATION:
+                    case Character.END_PUNCTUATION:
+                    case Character.CONNECTOR_PUNCTUATION:
+                    case Character.OTHER_PUNCTUATION:
+                    case Character.INITIAL_QUOTE_PUNCTUATION:
+                    case Character.FINAL_QUOTE_PUNCTUATION:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            // Inner class for Pie Chart Panel
+            static class PieChartPanel extends JPanel {
+                Map<String, Integer> data = new HashMap<>();
+
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    if (data.isEmpty()) return;
+
+                    int total = data.values().stream().mapToInt(Integer::intValue).sum();
+                    int startAngle = 0;
+                    int i = 0;
+                    Color[] colors = {new Color(70, 130, 180), new Color(144, 238, 144), new Color(255, 99, 71), new Color(238, 238, 0)};
+                    for (Map.Entry<String, Integer> entry : data.entrySet()) {
+                        int arc = (int) Math.round(entry.getValue() * 360.0 / total);
+                        g.setColor(colors[i % colors.length]);
+                        g.fillArc(10, 10, getWidth() - 20, getHeight() - 20, startAngle, arc);
+                        startAngle += arc;
+                        i++;
+                    }
+
+                    // Legend
+                    g.setFont(new Font("Arial", Font.BOLD, 12));
+                    int y = getHeight() - 60;
+                    i = 0;
+                    for (Map.Entry<String, Integer> entry : data.entrySet()) {
+                        g.setColor(colors[i % colors.length]);
+                        g.fillRect(10, y, 20, 20);
+                        g.setColor(Color.WHITE);
+                        g.drawString(entry.getKey() + " (" + entry.getValue() + ")", 35, y + 15);
+                        y += 25;
+                        i++;
+                    }
+                }
+
+                public void updateData(Map<String, Integer> newData) {
+                    data = newData;
+                    repaint();
+                }
+            }
+        }
+    }
+}
