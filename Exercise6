@@ -1,0 +1,18 @@
+
+
+import java.util.Scanner;
+
+public class Exercise6 {
+    public static void main(String[] args) {
+        System.out.print("Enter Your Name: ");
+        String name = new Scanner(System.in).nextLine();
+        boolean palendroome = palendromeCheck(name);
+        System.out.println(palendroome ? "It' is palindrome" : "It' not is palindrome");
+    }
+
+
+    public static boolean palendromeCheck(String name){
+//        this function will reversed String and return it
+        return name.equalsIgnoreCase(String.valueOf(new StringBuilder(name).reverse()));
+    }
+}
