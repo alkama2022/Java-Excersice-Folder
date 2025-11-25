@@ -1,0 +1,33 @@
+
+
+import java.util.Scanner;
+
+public class Exercise3 {
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter number to count ");
+        int num = scanner.nextInt();
+        calculateFibbonicciSeries(num);
+
+    }
+
+   public static void calculateFibbonicciSeries(int num){
+       int num1 = 0, temp,num2 =1,total;
+       if (num < 0 ){
+           System.out.println("Invalid input");
+           return;
+       } else if (num <= 1) {
+           System.out.println(0);
+           return;
+       }else {
+           System.out.print(0 + ", " + 1 +  ", ");
+           for (int i = 2; i < num; i++) {
+            total = num1 + num2;
+            System.out.print(total + ", ");
+            temp = num2;
+            num2 = total;
+            num1 = temp;
+       }
+   }
+}
+}
