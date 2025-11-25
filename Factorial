@@ -1,0 +1,17 @@
+public class PrimeRecursion {
+
+    public static void main(String[] args) {
+        System.out.println(isPrime(29)); // example
+    }
+
+    static boolean isPrime(int num) {
+        if (num <= 1) return false;
+        return checkPrime(num, 2);
+    }
+
+    static boolean checkPrime(int num, int divisor) {
+        if (divisor > Math.sqrt(num)) return true;
+        if (num % divisor == 0) return false;
+        return checkPrime(num, divisor + 1);
+    }
+}
